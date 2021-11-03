@@ -1,6 +1,6 @@
 module devtools
 
-go 1.17
+go 1.16
 
 require (
 	gopkg.in/yaml.v2 v2.4.0
@@ -8,8 +8,4 @@ require (
 	gorm.io/gorm v1.22.2
 )
 
-require (
-	github.com/go-sql-driver/mysql v1.6.0 // indirect
-	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/jinzhu/now v1.1.2 // indirect
-)
+require go.uber.org/zap v1.19.1
