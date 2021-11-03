@@ -1,27 +1,24 @@
 package config
 
 import (
-	`encoding/json`
-	`fmt`
-	`reflect`
-	`strings`
-	
+	"encoding/json"
+	"fmt"
+	"reflect"
+	"strings"
+
 	"gopkg.in/yaml.v2"
 )
 
-
 type ConfigMap struct {
-	data map[string]interface{}
+	data     map[string]interface{}
 	dataType string
 }
-
 
 func (s *ConfigMap) SetConfigType(dataType string) {
 	s.dataType = dataType
 }
 
-
-func (s *ConfigMap)parseBuffer(buff []byte, v interface{}) {
+func (s *ConfigMap) parseBuffer(buff []byte, v interface{}) {
 	var (
 		err error
 	)
@@ -38,32 +35,29 @@ func (s *ConfigMap)parseBuffer(buff []byte, v interface{}) {
 	}
 }
 
-
-func (s *ConfigMap)SetConfigBuffer(buff string) {
+func (s *ConfigMap) SetConfigBuffer(buff string) {
 	s.data = make(map[string]interface{})
 	s.parseBuffer([]byte(buff), &s.data)
 }
-
 
 func (s *ConfigMap) MapResult(buff string, v interface{}) {
 	s.parseBuffer([]byte(buff), v)
 }
 
-
 func (s *ConfigMap) GetByPathName(path []string) interface{} {
 	if s.data == nil {
 		return nil
 	}
-	
+
 	var v interface{}
 	var m map[interface{}]interface{}
-	
+
 	for index, key := range path {
 		key = strings.TrimSpace(key)
 		if len(key) <= 0 {
 			continue
 		}
-		
+
 		if m == nil {
 			v = s.data[key]
 		} else {
@@ -76,10 +70,9 @@ func (s *ConfigMap) GetByPathName(path []string) interface{} {
 			}
 		}
 	}
-	
+
 	return v
 }
-
 
 func (s *ConfigMap) GetInt(keys string) int {
 	path := strings.Split(keys, ".")
@@ -90,7 +83,6 @@ func (s *ConfigMap) GetInt(keys string) int {
 	return v.(int)
 }
 
-
 func (s *ConfigMap) GetInt8(keys string) int8 {
 	path := strings.Split(keys, ".")
 	v := s.GetByPathName(path)
@@ -99,7 +91,6 @@ func (s *ConfigMap) GetInt8(keys string) int8 {
 	}
 	return v.(int8)
 }
-
 
 func (s *ConfigMap) GetInt32(keys string) int32 {
 	path := strings.Split(keys, ".")
@@ -110,7 +101,6 @@ func (s *ConfigMap) GetInt32(keys string) int32 {
 	return v.(int32)
 }
 
-
 func (s *ConfigMap) GetInt64(keys string) int64 {
 	path := strings.Split(keys, ".")
 	v := s.GetByPathName(path)
@@ -119,7 +109,6 @@ func (s *ConfigMap) GetInt64(keys string) int64 {
 	}
 	return v.(int64)
 }
-
 
 func (s *ConfigMap) GetString(keys string) string {
 	path := strings.Split(keys, ".")
@@ -130,7 +119,6 @@ func (s *ConfigMap) GetString(keys string) string {
 	return v.(string)
 }
 
-
 func (s *ConfigMap) GetBool(keys string) bool {
 	path := strings.Split(keys, ".")
 	v := s.GetByPathName(path)
@@ -139,7 +127,6 @@ func (s *ConfigMap) GetBool(keys string) bool {
 	}
 	return v.(bool)
 }
-
 
 func (s *ConfigMap) GetStringArray(keys string) []string {
 	path := strings.Split(keys, ".")
@@ -152,7 +139,7 @@ func (s *ConfigMap) GetStringArray(keys string) []string {
 	for _, val := range v.([]interface{}) {
 		switch reflect.TypeOf(val).Kind() {
 		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 			r = append(r, fmt.Sprintf("%d", val))
 		case reflect.Float32, reflect.Float64:
 			r = append(r, fmt.Sprintf("%f", val))
@@ -181,11 +168,11 @@ a:
         - 1
         - 1.11
         d: dd`
-	
+
 	c := ConfigMap{}
 	c.SetConfigType("yaml")
 	c.SetConfigBuffer(v)
-	
+
 	t := c.GetString("a.b.d")
-	fmt.Printf("%v", t )
+	fmt.Printf("%v", t)
 }
