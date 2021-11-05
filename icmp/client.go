@@ -58,6 +58,15 @@ func WithDomain(domain string) PingOption {
 	}
 }
 
+const (
+	MacPs     = 28
+	WindowsPs = 4
+	LinuxPs   = 56
+)
+
+// WithPs on Mac ps size need be 28
+// WithPs on Windows ps size should be 4
+// WithPs on Linux ps size should be 56
 func WithPs(ps int) PingOption {
 	return func(opt *pingOpt) {
 		opt.ps = ps

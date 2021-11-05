@@ -17,9 +17,9 @@ import (
 
 func TestPing() {
 	v := icmp.Ping(
-		icmp.WithDomain("www.jd.com"),
+		icmp.WithDomain("www.baidu.com"),
 		icmp.WithCount(4),
-		icmp.WithPs(4),
+		icmp.WithPs(icmp.MacPs),
 		icmp.WithEcho(true),
 	)
 	if v >= 80 {
@@ -93,5 +93,6 @@ func Test() {
 }
 
 func main() {
-	WriteProducer()
+	// WriteProducer()
+	TestPing()
 }
